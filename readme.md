@@ -79,9 +79,9 @@ Real-time path: SDK → API → Kafka → Alerts → Email/Slack.
 
 Batch path: Kafka → Workers → ClickHouse/S3 → Dashboard qu
 
-# Components
+## Components
 
-## 1. Client SDKs
+### 1. Client SDKs
 
 Capture errors/exceptions + metadata (env, release, user).
 
@@ -93,7 +93,7 @@ Language SDKs: JS/TS, Python, Java/Kotlin, Swift/Obj-C, Go, .NET.
 
 Transport: HTTPS JSON (optionally gRPC).
 
-## 2. Ingestion API
+### 2. Ingestion API
 
 API Gateway (Envoy) for TLS, auth, rate limits.
 
@@ -101,7 +101,7 @@ Ingestion Service (written in Go/Node for performance) validates incoming events
 
 Decouples spikes with durable queue.
 
-## 3. Processing & Storage
+### 3. Processing & Storage
 
 Workers: enrich, deduplicate, group errors.
 
@@ -117,7 +117,7 @@ S3 - raw event storage (cheap, durable).
 
 Redis - caching, rate limits.
 
-## 4. Dashboard
+### 4. Dashboard
 
 Frontend: React + TypeScript.
 
@@ -125,7 +125,7 @@ Backend: REST/GraphQL query layer.
 
 Features: search, filters, error grouping, stack traces, alert config.
 
-## 5. Alerts
+### 5. Alerts
 
 Rules: new issue, regression, error rate > threshold.
 
@@ -133,7 +133,7 @@ Channels: Email, Slack, Webhooks, PagerDuty.
 
 Engine consumes Kafka, evaluates rules in near real-time.
 
-## 6. DevOps
+### 6. DevOps
 
 Deploy on Kubernetes (EKS/GKE/AKS).
 
