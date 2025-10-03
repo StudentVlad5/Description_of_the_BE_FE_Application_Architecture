@@ -1,8 +1,5 @@
 ### 1. Executive Summary
 
-I think the MERN stack will be the perfect technology for this project.
-It looks like the ideal stack for this goals.
-
 1. Lightweight SDKs - Client Library: JS, Python, Java, Go;
    that capture errors, attach context, and send batched events to a public REST API.
 
@@ -76,6 +73,11 @@ It looks like the ideal stack for this goals.
     [Analytics / Search / Settings]
     (ClickHouse / OpenSearch / Postgres)
 
+9. Real-time vs batch flows explicitly:
+
+Real-time path: SDK → API → Kafka → Alerts → Email/Slack.
+Batch path: Kafka → Workers → ClickHouse/S3 → Dashboard qu
+
 ### Components
 
 ## 1. Client SDKs
@@ -94,7 +96,7 @@ Transport: HTTPS JSON (optionally gRPC).
 
 API Gateway (Envoy) for TLS, auth, rate limits.
 
-Ingestion Service (Go/Node) → validates & forwards to Kafka/Kinesis.
+Ingestion Service (written in Go/Node for performance) validates incoming events and uses Kafka/Kinesis to ensure no data is lost, even under heavy load.
 
 Decouples spikes with durable queue.
 
@@ -144,27 +146,47 @@ Tiered storage to control cost (hot 30d, cold archive in S3).
 
 ## Key Questions for Product Owner/Stackholders
 
-1. Target users: internal teams only, or external customers too?
+# Business:
 
-2. Expected volume (events/sec) now and 12mo?
+1. Who are the target users — internal teams only, or external customers as well?
+2. What is the monetization model (free tier, paid plans, enterprise licensing)?
 
-3. Retention policy: free vs. paid tiers?
+# Scale:
 
-4. Must-have SDK languages at launch?
+1. What is the expected ingestion volume (events/sec) at launch and after 12 months?
+2. How many tenants/projects/users are expected to be supported?
 
-5. Alerting integrations: email only, or Slack/PagerDuty too?
+# Compliance:
 
-6. Compliance needs: GDPR(General Data Protection Regulation), HIPAA(Health Insurance Portability and Accountability Act, USA), SOC2(Service Organization Control 2)?
+1. Are there compliance requirements (GDPR(General Data Protection Regulation), HIPAA(Health Insurance Portability and Accountability Act, USA), SOC2(Service Organization Control 2))?
+2. Are there data residency requirements (e.g., EU-only storage)?
 
-7. Cloud preference (AWS/GCP/Azure)?
+# Product Features:
 
-8. SLA targets (availability, query latency, alert delivery)?
+1. Which SDK languages must be supported at launch (JS, Python, Java, Go, etc.)?
+2. Which alerting/integration channels are required (Email, Slack, PagerDuty, Jira, Webhooks)?
+
+# Operations:
+
+1. What SLA/SLO targets are required (availability, query latency, alert delivery - e.g. 99.9% availability, <200ms query latency, alerts within 30s)?
+2. Is there a preferred cloud provider (AWS, GCP, Azure) or need for multi-cloud/on-premise?
+3. What are the budget constraints for infrastructure and storage?
 
 ### Tech Stack (short list) for discussing
 
 - SDKs: JS, Python, Java/Kotlin, Swift, Go, .NET
 - Backend: Go + Envoy + Kafka
-- DBs: ClickHouse, OpenSearch, Postgres, MD, Redis, S3
+- DBs: ClickHouse*, OpenSearch*, Postgres\*, Redis, S3
 - Frontend: React + TS (Next.js)
 - Infra: Kubernetes, Terraform, Prometheus, Grafana
 - Email: SendGrid / SES
+
+* - ClickHouse vs BigQuery: ClickHouse chosen for low-latency OLAP queries without vendor lock-in.
+    OpenSearch vs Elastic: OpenSearch = open-source, no licensing risk.
+    Postgres vs MongoDB: Postgres better for relational data (users, orgs, billing).
+
+### Roadmap for discussing
+
+v1: basic SDKs, error ingestion, dashboard, email alerts.
+v2: advanced search, Slack/PagerDuty, anomaly detection.
+v3: ML-driven error grouping, root-cause analysis.
