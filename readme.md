@@ -145,29 +145,29 @@ Backups: Postgres snapshots, ClickHouse → S3.
 
 Tiered storage to control cost (hot 30d, cold archive in S3).
 
-# Key Questions for Product Owner/Stackholders
+## Key Questions for Product Owner/Stackholders
 
-## Business:
+### Business:
 
 1. Who are the target users — internal teams only, or external customers as well?
 2. What is the monetization model (free tier, paid plans, enterprise licensing)?
 
-## Scale:
+### Scale:
 
 1. What is the expected ingestion volume (events/sec) at launch and after 12 months?
 2. How many tenants/projects/users are expected to be supported?
 
-## Compliance:
+### Compliance:
 
 1. Are there compliance requirements (GDPR(General Data Protection Regulation), HIPAA(Health Insurance Portability and Accountability Act, USA), SOC2(Service Organization Control 2))?
 2. Are there data residency requirements (e.g., EU-only storage)?
 
-## Product Features:
+### Product Features:
 
 1. Which SDK languages must be supported at launch (JS, Python, Java, Go, etc.)?
 2. Which alerting/integration channels are required (Email, Slack, PagerDuty, Jira, Webhooks)?
 
-## Operations:
+### Operations:
 
 1. What SLA/SLO targets are required (availability, query latency, alert delivery - e.g. 99.9% availability, <200ms query latency, alerts within 30s)?
 2. Is there a preferred cloud provider (AWS, GCP, Azure) or need for multi-cloud/on-premise?
@@ -182,9 +182,11 @@ Tiered storage to control cost (hot 30d, cold archive in S3).
 - Infra: Kubernetes, Terraform, Prometheus, Grafana
 - Email: SendGrid / SES
 
-* - ClickHouse vs BigQuery: ClickHouse chosen for low-latency OLAP queries without vendor lock-in.
-    OpenSearch vs Elastic: OpenSearch = open-source, no licensing risk.
-    Postgres vs MongoDB: Postgres better for relational data (users, orgs, billing).
+  - ClickHouse vs BigQuery: ClickHouse chosen for low-latency OLAP queries without vendor lock-in.
+
+  - OpenSearch vs Elastic: OpenSearch = open-source, no licensing risk.
+
+  - Postgres vs MongoDB: Postgres better for relational data (users, orgs, billing).
 
 ### Roadmap for discussing
 
